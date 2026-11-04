@@ -1,7 +1,7 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publishedAt": "2026-11-04",
-  "notes": "Totales agrupados por casillas (Pago Móvil, Transferencias, POS, Zelle, Biopago, Efectivo y Créditos) y desglose ordenado por casillas.",
+  "notes": "Nombre de cliente opcional en créditos, casillas de totales agrupadas, ícono oficial y motor de actualizaciones directas.",
   "apkUrl": "https://github.com/Rizz2001/strawberry/releases/latest/download/strawchell.apk",
   "webUrl": "https://github.com/Rizz2001/strawberry/releases/latest"
 }
