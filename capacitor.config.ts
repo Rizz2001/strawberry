@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
   appId: 'com.strawchell.caja',
   appName: 'strawchell',
   webDir: 'dist',
-  bundledWebRuntime: false,
   server: {
     androidScheme: 'https'
   }

@@ -2,6 +2,6 @@
   "version": "1.0.0",
   "publishedAt": "2026-11-03",
   "notes": "Versión inicial de strawchell con diseño Clean Light Fintech, motor multimoneda Bs/USD y exportación PDF.",
-  "apkUrl": "",
-  "webUrl": ""
+  "apkUrl": "https://github.com/Rizz2001/strawberry/releases/latest/download/strawchell.apk",
+  "webUrl": "https://github.com/Rizz2001/strawberry/releases/latest"
 }

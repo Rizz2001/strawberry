@@ -8,7 +8,7 @@ export const STORAGE_KEY_UPDATE_URL = 'strawchell_update_manifest_url';
  */
 export const DEFAULT_UPDATE_MANIFEST_URL =
   import.meta.env.VITE_UPDATE_MANIFEST_URL ||
-  'https://raw.githubusercontent.com/strawchell/strawchell-app/main/public/version.json';
+  'https://raw.githubusercontent.com/Rizz2001/strawberry/main/public/version.json';
 
 export interface RemoteVersionManifest {
   version: string;
@@ -162,3 +162,4 @@ export async function applyAppUpdate(manifest?: RemoteVersionManifest): Promise<
 
   window.location.reload();
 }
+
