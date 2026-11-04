@@ -248,7 +248,6 @@ export function App() {
             onRestoreBackup={handleRestoreBackup}
             availableUpdate={availableUpdate}
             onUpdateFound={setAvailableUpdate}
-            onReplaySplash={() => setShowSplash(true)}
           />
         )}
       </main>
