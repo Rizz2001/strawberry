@@ -53,8 +53,8 @@ export const ExchangeRateModal: React.FC<ExchangeRateModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-white border border-white rounded-3xl p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+    <div className="anim-backdrop fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4">
+      <div className="anim-modal w-full max-w-md bg-white border border-white rounded-3xl p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-[#F4F6FB] border border-slate-100 flex items-center justify-center shrink-0">
@@ -77,7 +77,7 @@ export const ExchangeRateModal: React.FC<ExchangeRateModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full bg-slate-100 text-[#64748B] hover:text-[#0F172A] cursor-pointer"
+              className="p-2 rounded-full bg-slate-100 text-[#64748B] hover:text-[#0F172A] cursor-pointer active:scale-90 transition-transform"
             >
               <X className="w-4 h-4" />
             </button>

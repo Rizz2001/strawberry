@@ -58,8 +58,8 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/40 backdrop-blur-md p-0 sm:p-4">
-      <div className="w-full max-w-lg bg-[#F4F6FB] border border-white rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_20px_60px_rgba(15,23,42,0.22)] space-y-3.5">
+    <div className="anim-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/40 backdrop-blur-md p-0 sm:p-4">
+      <div className="anim-sheet sm:anim-modal w-full max-w-lg bg-[#F4F6FB] border border-white rounded-t-3xl sm:rounded-3xl p-5 shadow-[0_20px_60px_rgba(15,23,42,0.22)] space-y-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-[#5B4EFF] text-white flex items-center justify-center shadow-md shadow-indigo-500/30">
@@ -73,7 +73,7 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({
               setLastAddedToast('');
               onClose();
             }}
-            className="p-2 rounded-full bg-white text-[#64748B] hover:text-[#0F172A] shadow-sm cursor-pointer"
+            className="p-2 rounded-full bg-white text-[#64748B] hover:text-[#0F172A] shadow-sm cursor-pointer active:scale-90 transition-transform"
           >
             <X className="w-4 h-4" />
           </button>
@@ -88,7 +88,7 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({
                 key={pill.id}
                 type="button"
                 onClick={() => setSelectedPill(pill.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer active:scale-95 ${
                   active
                     ? 'bg-[#5B4EFF] text-white shadow-sm'
                     : 'text-[#64748B] hover:text-[#0F172A]'
@@ -101,7 +101,7 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({
         </div>
 
         {lastAddedToast && (
-          <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-700">
+          <div className="anim-badge-pop flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-700 shadow-xs">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{lastAddedToast}</span>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AlertCircle, Plus, UserCheck } from 'lucide-react';
+import { AlertCircle, Check, Plus, UserCheck } from 'lucide-react';
 import { Currency, MovimientosPillTab, TransactionCategory } from '../types/cash';
 import {
   calculateDualAmounts,
@@ -42,6 +42,7 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
   const [clientName, setClientName] = useState<string>('');
   const [invoiceNumber, setInvoiceNumber] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const amountInputRef = useRef<HTMLInputElement>(null);
 
@@ -109,6 +110,11 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
       clientName: isCredit && clientName.trim() ? clientName.trim() : undefined,
       invoiceNumber: isCredit && invoiceNumber.trim() ? invoiceNumber.trim() : undefined,
     });
+
+    setIsSuccess(true);
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 750);
 
     setAmountStr('');
     setNote('');
@@ -247,9 +253,16 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
       {/* Formulario Numérico Limpio */}
       <form onSubmit={handleSubmit} className="space-y-2.5">
         <div className="flex items-center justify-between text-xs px-0.5">
-          <span className="font-bold text-[#0F172A]">
-            {CATEGORY_LABELS[category]}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#0F172A]">
+              {CATEGORY_LABELS[category]}
+            </span>
+            {isSuccess && (
+              <span className="anim-badge-pop text-[10px] font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
+                <Check className="w-2.5 h-2.5 stroke-[3]" /> ¡Guardado!
+              </span>
+            )}
+          </div>
           <span className="font-bold text-[#10B981]">
             {isUsdInput
               ? `= ${formatVES(preview.amountVES)}`
@@ -260,8 +273,10 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
         <div className="flex items-stretch gap-2">
           <div className="relative flex-1">
             <span
-              className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-extrabold select-none ${
-                isCredit
+              className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-extrabold select-none transition-colors ${
+                isSuccess
+                  ? 'text-emerald-500'
+                  : isCredit
                   ? 'text-[#F97316]'
                   : isUsdInput
                   ? 'text-[#10B981]'
@@ -282,17 +297,29 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
                 setAmountStr(e.target.value);
                 setErrorMsg('');
               }}
-              className="w-full bg-slate-50 focus:bg-white border-2 border-slate-200/80 focus:border-[#5B4EFF] rounded-2xl pl-12 pr-3 py-3 text-2xl font-extrabold text-[#0F172A] placeholder-slate-300 focus:outline-none transition-all"
+              className={`w-full bg-slate-50 focus:bg-white border-2 rounded-2xl pl-12 pr-3 py-3 text-2xl font-extrabold text-[#0F172A] placeholder-slate-300 focus:outline-none transition-all duration-200 ${
+                isSuccess
+                  ? 'border-emerald-400 ring-2 ring-emerald-100 bg-emerald-50/20'
+                  : 'border-slate-200/80 focus:border-[#5B4EFF]'
+              }`}
               autoFocus
             />
           </div>
 
           <button
             type="submit"
-            className="w-14 rounded-2xl bg-[#5B4EFF] hover:bg-[#4F46E5] text-white font-bold shadow-lg shadow-indigo-500/30 flex items-center justify-center active:scale-95 transition-all cursor-pointer shrink-0"
+            className={`w-14 rounded-2xl font-bold flex items-center justify-center active:scale-90 transition-all duration-200 cursor-pointer shrink-0 ${
+              isSuccess
+                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 scale-105'
+                : 'bg-[#5B4EFF] hover:bg-[#4F46E5] text-white shadow-lg shadow-indigo-500/30'
+            }`}
             title="Agregar (Enter)"
           >
-            <Plus className="w-6 h-6 stroke-[2.5]" />
+            {isSuccess ? (
+              <Check className="w-6 h-6 stroke-[3] anim-success-pulse" />
+            ) : (
+              <Plus className="w-6 h-6 stroke-[2.5]" />
+            )}
           </button>
         </div>
 

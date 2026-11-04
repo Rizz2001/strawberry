@@ -51,8 +51,8 @@ export const ClosureModal: React.FC<ClosureModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/40 backdrop-blur-md p-0 sm:p-4">
-      <div className="w-full max-w-lg bg-white border border-white rounded-t-3xl sm:rounded-3xl p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)] max-h-[90vh] overflow-y-auto space-y-4">
+    <div className="anim-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/40 backdrop-blur-md p-0 sm:p-4">
+      <div className="anim-sheet sm:anim-modal w-full max-w-lg bg-white border border-white rounded-t-3xl sm:rounded-3xl p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)] max-h-[90vh] overflow-y-auto space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
           <div className="flex items-center gap-2.5">
             <StrawchellLogo className="w-7 h-7 shrink-0" showText={false} />
@@ -68,7 +68,7 @@ export const ClosureModal: React.FC<ClosureModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full bg-slate-100 text-[#64748B] hover:text-[#0F172A] cursor-pointer"
+            className="p-2 rounded-full bg-slate-100 text-[#64748B] hover:text-[#0F172A] cursor-pointer active:scale-90 transition-transform"
           >
             <X className="w-5 h-5" />
           </button>

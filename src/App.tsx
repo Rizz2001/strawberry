@@ -205,51 +205,53 @@ export function App() {
         </div>
       )}
 
-      {/* Contenido Principal */}
+      {/* Contenido Principal con Transición Fluida entre Vistas */}
       <main className="relative z-10 max-w-lg mx-auto px-4 pt-3">
-        {activeScreen === 'INICIO' && (
-          <HomeView
-            exchangeRate={session.exchangeRate}
-            totals={totals}
-            onNavigateToCategory={handleNavigateToCategoryPill}
-            onNavigateToCierre={() => setActiveScreen('CIERRE')}
-          />
-        )}
+        <div key={activeScreen} className="anim-screen-enter">
+          {activeScreen === 'INICIO' && (
+            <HomeView
+              exchangeRate={session.exchangeRate}
+              totals={totals}
+              onNavigateToCategory={handleNavigateToCategoryPill}
+              onNavigateToCierre={() => setActiveScreen('CIERRE')}
+            />
+          )}
 
-        {activeScreen === 'MOVIMIENTOS' && (
-          <MovimientosView
-            activePill={activePill}
-            onSelectPill={setActivePill}
-            exchangeRate={session.exchangeRate}
-            transactions={session.transactions}
-            posConsolidation={totals.pos}
-            totals={totals}
-            onAddTransaction={handleAddTransaction}
-            onDeleteTransaction={handleDeleteTransaction}
-            onRequireRate={() => setIsRateModalOpen(true)}
-          />
-        )}
+          {activeScreen === 'MOVIMIENTOS' && (
+            <MovimientosView
+              activePill={activePill}
+              onSelectPill={setActivePill}
+              exchangeRate={session.exchangeRate}
+              transactions={session.transactions}
+              posConsolidation={totals.pos}
+              totals={totals}
+              onAddTransaction={handleAddTransaction}
+              onDeleteTransaction={handleDeleteTransaction}
+              onRequireRate={() => setIsRateModalOpen(true)}
+            />
+          )}
 
-        {activeScreen === 'DESGLOSE' && (
-          <DesgloseView
-            totals={totals}
-            onSelectCategoryPill={handleNavigateToCategoryPill}
-            onOpenClosureModal={() => setIsClosureModalOpen(true)}
-          />
-        )}
+          {activeScreen === 'DESGLOSE' && (
+            <DesgloseView
+              totals={totals}
+              onSelectCategoryPill={handleNavigateToCategoryPill}
+              onOpenClosureModal={() => setIsClosureModalOpen(true)}
+            />
+          )}
 
-        {activeScreen === 'CIERRE' && (
-          <CierreView
-            session={session}
-            totals={totals}
-            closedHistory={closedHistory}
-            onOpenRateModal={() => setIsRateModalOpen(true)}
-            onResetSession={handleResetSession}
-            onRestoreBackup={handleRestoreBackup}
-            availableUpdate={availableUpdate}
-            onUpdateFound={setAvailableUpdate}
-          />
-        )}
+          {activeScreen === 'CIERRE' && (
+            <CierreView
+              session={session}
+              totals={totals}
+              closedHistory={closedHistory}
+              onOpenRateModal={() => setIsRateModalOpen(true)}
+              onResetSession={handleResetSession}
+              onRestoreBackup={handleRestoreBackup}
+              availableUpdate={availableUpdate}
+              onUpdateFound={setAvailableUpdate}
+            />
+          )}
+        </div>
       </main>
 
       {/* Barra de Navegación Inferior Fija con Botón Central Flotante (+ FAB) */}
@@ -258,7 +260,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setActiveScreen('INICIO')}
-            className={`flex flex-col items-center justify-center gap-1 py-1 transition-colors cursor-pointer ${
+            className={`flex flex-col items-center justify-center gap-1 py-1 transition-all duration-150 active:scale-90 cursor-pointer ${
               activeScreen === 'INICIO'
                 ? 'text-[#5B4EFF] font-extrabold'
                 : 'text-[#64748B] hover:text-[#0F172A] font-medium'
@@ -271,7 +273,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setActiveScreen('MOVIMIENTOS')}
-            className={`relative flex flex-col items-center justify-center gap-1 py-1 transition-colors cursor-pointer ${
+            className={`relative flex flex-col items-center justify-center gap-1 py-1 transition-all duration-150 active:scale-90 cursor-pointer ${
               activeScreen === 'MOVIMIENTOS'
                 ? 'text-[#5B4EFF] font-extrabold'
                 : 'text-[#64748B] hover:text-[#0F172A] font-medium'
@@ -290,7 +292,7 @@ export function App() {
             <button
               type="button"
               onClick={() => setIsQuickAddModalOpen(true)}
-              className="w-14 h-14 rounded-full bg-[#5B4EFF] hover:bg-[#4F46E5] text-white shadow-lg shadow-indigo-500/40 -mt-6 flex items-center justify-center active:scale-95 transition-all cursor-pointer"
+              className="w-14 h-14 rounded-full bg-[#5B4EFF] hover:bg-[#4F46E5] text-white shadow-lg shadow-indigo-500/40 -mt-6 flex items-center justify-center active:scale-90 active:rotate-45 transition-all duration-200 cursor-pointer"
               title="Anotar pago rápido"
             >
               <Plus className="w-7 h-7 stroke-[2.5]" />
@@ -300,7 +302,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setActiveScreen('DESGLOSE')}
-            className={`flex flex-col items-center justify-center gap-1 py-1 transition-colors cursor-pointer ${
+            className={`flex flex-col items-center justify-center gap-1 py-1 transition-all duration-150 active:scale-90 cursor-pointer ${
               activeScreen === 'DESGLOSE'
                 ? 'text-[#5B4EFF] font-extrabold'
                 : 'text-[#64748B] hover:text-[#0F172A] font-medium'
@@ -313,7 +315,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setActiveScreen('CIERRE')}
-            className={`relative flex flex-col items-center justify-center gap-1 py-1 transition-colors cursor-pointer ${
+            className={`relative flex flex-col items-center justify-center gap-1 py-1 transition-all duration-150 active:scale-90 cursor-pointer ${
               activeScreen === 'CIERRE'
                 ? 'text-[#5B4EFF] font-extrabold'
                 : 'text-[#64748B] hover:text-[#0F172A] font-medium'

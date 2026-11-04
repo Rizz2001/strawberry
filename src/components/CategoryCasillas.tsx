@@ -120,7 +120,7 @@ export const CategoryCasillas: React.FC<CategoryCasillasProps> = ({
   if (activePill !== 'TODOS' && activeSingleCasilla) {
     const Icon = activeSingleCasilla.icon;
     return (
-      <div className="bg-white/95 backdrop-blur-md border border-white rounded-3xl p-4 shadow-[0_6px_24px_rgb(15,23,42,0.04)] mb-3">
+      <div className="anim-item-enter bg-white/95 backdrop-blur-md border border-white rounded-3xl p-4 shadow-[0_6px_24px_rgb(15,23,42,0.04)] mb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
@@ -195,9 +195,9 @@ export const CategoryCasillas: React.FC<CategoryCasillasProps> = ({
               key={c.id}
               type="button"
               onClick={() => onSelectPill(c.id)}
-              className={`p-3 rounded-2xl border text-left transition-all active:scale-98 cursor-pointer ${
+              className={`p-3 rounded-2xl border text-left transition-all duration-200 active:scale-95 hover:scale-[1.01] cursor-pointer ${
                 hasOps
-                  ? 'bg-white/95 border-white shadow-[0_4px_16px_rgb(15,23,42,0.035)] hover:border-indigo-100'
+                  ? 'bg-white/95 border-white shadow-[0_4px_16px_rgb(15,23,42,0.035)] hover:border-indigo-100 hover:shadow-md'
                   : 'bg-white/60 border-slate-100 opacity-70'
               }`}
             >

@@ -101,7 +101,7 @@ export const MovimientosView: React.FC<MovimientosViewProps> = ({
               key={pill.id}
               type="button"
               onClick={() => onSelectPill(pill.id)}
-              className={`px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-150 active:scale-95 cursor-pointer ${
                 isActive
                   ? 'bg-[#5B4EFF] text-white shadow-md shadow-indigo-500/25'
                   : 'text-[#64748B] hover:text-[#0F172A]'

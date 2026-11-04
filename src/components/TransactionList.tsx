@@ -143,7 +143,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     return (
       <div
         key={tx.id}
-        className="bg-white/95 backdrop-blur-md border border-white rounded-2xl p-3.5 mb-2.5 flex items-center justify-between gap-3 shadow-[0_4px_16px_rgb(15,23,42,0.03)] hover:shadow-[0_6px_20px_rgb(15,23,42,0.05)] transition-all"
+        className="anim-item-enter bg-white/95 backdrop-blur-md border border-white rounded-2xl p-3.5 mb-2.5 flex items-center justify-between gap-3 shadow-[0_4px_16px_rgb(15,23,42,0.03)] hover:shadow-[0_6px_20px_rgb(15,23,42,0.05)] transition-all"
       >
         {/* Izquierda: Círculo pastel con número (#1, #2...) + Título + Hora/Referencia */}
         <div className="flex items-center gap-3 min-w-0">
@@ -270,7 +270,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
           return (
             <div
               key={g.id}
-              className="fintech-card rounded-3xl p-4 shadow-[0_6px_24px_rgb(15,23,42,0.03)]"
+              className="anim-item-enter fintech-card rounded-3xl p-4 shadow-[0_6px_24px_rgb(15,23,42,0.03)]"
             >
               {/* Encabezado de la Casilla */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
