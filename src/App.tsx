@@ -38,10 +38,12 @@ import { CierreView } from './components/CierreView';
 import { ExchangeRateModal } from './components/ExchangeRateModal';
 import { ClosureModal } from './components/ClosureModal';
 import { QuickAddModal } from './components/QuickAddModal';
+import { SplashScreenAnimation } from './components/SplashScreenAnimation';
 
 export function App() {
   const [session, setSession] = useState<CashSession>(() => loadActiveSession());
   const [closedHistory, setClosedHistory] = useState<CashSession[]>(() => loadClosedHistory());
+  const [showSplash, setShowSplash] = useState<boolean>(true);
 
   const [activeScreen, setActiveScreen] = useState<MainScreenView>('INICIO');
   const [activePill, setActivePill] = useState<MovimientosPillTab>('PAGO_MOVIL');
@@ -245,6 +247,7 @@ export function App() {
             onRestoreBackup={handleRestoreBackup}
             availableUpdate={availableUpdate}
             onUpdateFound={setAvailableUpdate}
+            onReplaySplash={() => setShowSplash(true)}
           />
         )}
       </main>
@@ -354,6 +357,11 @@ export function App() {
         totals={totals}
         onClose={() => setIsClosureModalOpen(false)}
       />
+
+      {/* Animación de apertura al iniciar la app */}
+      {showSplash && (
+        <SplashScreenAnimation onFinish={() => setShowSplash(false)} />
+      )}
     </div>
   );
 }

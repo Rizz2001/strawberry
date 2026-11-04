@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publishedAt": "2026-11-03",
-  "notes": "Versión inicial de strawchell con diseño Clean Light Fintech, motor multimoneda Bs/USD y exportación PDF.",
+  "notes": "Icono oficial strawchell en Android y animación de bienvenida suave al abrir la app.",
   "apkUrl": "https://github.com/Rizz2001/strawberry/releases/latest/download/strawchell.apk",
   "webUrl": "https://github.com/Rizz2001/strawberry/releases/latest"
 }

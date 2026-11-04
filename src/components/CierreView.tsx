@@ -12,6 +12,7 @@ import {
   RotateCcw,
   Settings2,
   Share2,
+  Sparkles,
   Upload,
 } from 'lucide-react';
 import { CashSession, SessionCalculatedTotals } from '../types/cash';
@@ -44,6 +45,7 @@ interface CierreViewProps {
   onRestoreBackup: (restoredSession: CashSession, restoredHistory: CashSession[]) => void;
   availableUpdate?: RemoteVersionManifest | null;
   onUpdateFound: (manifest: RemoteVersionManifest | null) => void;
+  onReplaySplash?: () => void;
 }
 
 export const CierreView: React.FC<CierreViewProps> = ({
@@ -55,6 +57,7 @@ export const CierreView: React.FC<CierreViewProps> = ({
   onRestoreBackup,
   availableUpdate,
   onUpdateFound,
+  onReplaySplash,
 }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [resetStep, setResetStep] = useState<0 | 1 | 2>(0);
@@ -376,6 +379,17 @@ export const CierreView: React.FC<CierreViewProps> = ({
             className="hidden"
           />
         </div>
+
+        {onReplaySplash && (
+          <button
+            type="button"
+            onClick={onReplaySplash}
+            className="w-full py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-[#64748B] hover:text-[#0F172A] font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#5B4EFF]" />
+            <span>Probar animación de apertura</span>
+          </button>
+        )}
       </div>
 
       {/* 4. Reiniciar Jornada con Doble Confirmación */}
