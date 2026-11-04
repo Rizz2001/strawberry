@@ -1,7 +1,7 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publishedAt": "2026-11-04",
-  "notes": "Nombre de cliente opcional en créditos, casillas de totales agrupadas, ícono oficial y motor de actualizaciones directas.",
-  "apkUrl": "https://github.com/Rizz2001/strawberry/releases/latest/download/strawchell.apk",
-  "webUrl": "https://github.com/Rizz2001/strawberry/releases/latest"
+  "notes": "Micro-animaciones fluidas al abrir ventanas y registrar pagos, optimizaciones táctiles y casillas de totales.",
+  "apkUrl": "https://github.com/Rizz2001/strawberry/releases/download/v1.0.4/strawchell.apk",
+  "webUrl": "https://github.com/Rizz2001/strawberry/releases/tag/v1.0.4"
 }

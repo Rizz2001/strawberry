@@ -1,4 +1,4 @@
-export const APP_VERSION = '1.0.3';
+export const APP_VERSION = '1.0.4';
 export const STORAGE_KEY_UPDATE_URL = 'strawchell_update_manifest_url';
 
 export const GITHUB_REPO = 'Rizz2001/strawberry';
