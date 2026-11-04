@@ -223,6 +223,7 @@ export function App() {
             exchangeRate={session.exchangeRate}
             transactions={session.transactions}
             posConsolidation={totals.pos}
+            totals={totals}
             onAddTransaction={handleAddTransaction}
             onDeleteTransaction={handleDeleteTransaction}
             onRequireRate={() => setIsRateModalOpen(true)}

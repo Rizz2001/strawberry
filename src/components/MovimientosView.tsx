@@ -4,11 +4,13 @@ import {
   Currency,
   MovimientosPillTab,
   PosConsolidation,
+  SessionCalculatedTotals,
   TransactionCategory,
 } from '../types/cash';
 import { QuickEntryForm } from './QuickEntryForm';
 import { TransactionList } from './TransactionList';
 import { PosSummaryCard } from './PosSummaryCard';
+import { CategoryCasillas } from './CategoryCasillas';
 
 interface MovimientosViewProps {
   activePill: MovimientosPillTab;
@@ -16,6 +18,7 @@ interface MovimientosViewProps {
   exchangeRate: number;
   transactions: CashTransaction[];
   posConsolidation: PosConsolidation;
+  totals: SessionCalculatedTotals;
   onAddTransaction: (payload: {
     category: TransactionCategory;
     inputCurrency: Currency;
@@ -34,11 +37,13 @@ export const MovimientosView: React.FC<MovimientosViewProps> = ({
   exchangeRate,
   transactions,
   posConsolidation,
+  totals,
   onAddTransaction,
   onDeleteTransaction,
   onRequireRate,
 }) => {
   const pills: { id: MovimientosPillTab; label: string }[] = [
+    { id: 'TODOS', label: 'Todos' },
     { id: 'PAGO_MOVIL', label: 'Pago Móvil' },
     { id: 'POS', label: 'Punto Venta' },
     { id: 'ZELLE', label: 'Zelle' },
@@ -46,7 +51,6 @@ export const MovimientosView: React.FC<MovimientosViewProps> = ({
     { id: 'BIOPAGO', label: 'Biopago' },
     { id: 'EFECTIVO', label: 'Efectivo' },
     { id: 'CREDITOS', label: 'Créditos' },
-    { id: 'TODOS', label: 'Todos' },
   ];
 
   const filteredTransactions = useMemo(() => {
@@ -117,14 +121,22 @@ export const MovimientosView: React.FC<MovimientosViewProps> = ({
         onRequireRate={onRequireRate}
       />
 
+      {/* 3. Casillas de Totales Agrupadas (Pago Móvil, Transferencias, POS, Zelle, etc.) */}
+      <CategoryCasillas
+        totals={totals}
+        activePill={activePill}
+        onSelectPill={onSelectPill}
+      />
+
       {/* Tarjeta de Consolidación Débito + MasterCard cuando está en Punto de Venta */}
       {activePill === 'POS' && <PosSummaryCard pos={posConsolidation} />}
 
-      {/* 3. Listado Numerado de Pagos Anotados */}
+      {/* 4. Listado de Operaciones Agrupadas por Casillas */}
       <TransactionList
         title={titleByPill[activePill]}
         transactions={filteredTransactions}
         onDeleteTransaction={onDeleteTransaction}
+        groupByCategory={activePill === 'TODOS'}
       />
     </div>
   );

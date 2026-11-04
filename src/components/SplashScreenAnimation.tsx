@@ -107,3 +107,4 @@ export const SplashScreenAnimation: React.FC<SplashScreenAnimationProps> = ({
     </div>
   );
 };
+
