@@ -1,22 +1,17 @@
 export const APP_VERSION = '1.0.2';
 export const STORAGE_KEY_UPDATE_URL = 'strawchell_update_manifest_url';
 
-/**
- * URL por defecto donde la app buscará actualizaciones cuando el teléfono tenga internet.
- * Puedes usar una variable de entorno VITE_UPDATE_MANIFEST_URL (ej. tu repositorio de GitHub o dominio en Vercel)
- * o configurarla directamente desde el panel de la app.
- */
-export const DEFAULT_UPDATE_MANIFEST_URL =
-  import.meta.env.VITE_UPDATE_MANIFEST_URL ||
-  'https://raw.githubusercontent.com/Rizz2001/strawberry/main/public/version.json';
+export const GITHUB_REPO = 'Rizz2001/strawberry';
+export const GITHUB_API_LATEST_RELEASE = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+export const DEFAULT_UPDATE_MANIFEST_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/version.json`;
 
 export interface RemoteVersionManifest {
   version: string;
   publishedAt?: string;
   notes?: string;
-  /** Enlace directo al nuevo archivo .apk (ej. en GitHub Releases) */
+  /** Enlace directo al nuevo archivo .apk */
   apkUrl?: string;
-  /** Enlace web / OTA opcional */
+  /** Enlace web / Release */
   webUrl?: string;
 }
 
@@ -28,9 +23,6 @@ export interface UpdateCheckResult {
   error?: string;
 }
 
-/**
- * Obtiene la URL del manifiesto de actualización configurada
- */
 export function getUpdateManifestUrl(): string {
   try {
     return localStorage.getItem(STORAGE_KEY_UPDATE_URL) || DEFAULT_UPDATE_MANIFEST_URL;
@@ -39,9 +31,6 @@ export function getUpdateManifestUrl(): string {
   }
 }
 
-/**
- * Guarda una URL personalizada para el servidor de actualizaciones
- */
 export function setUpdateManifestUrl(url: string): void {
   try {
     const clean = url.trim();
@@ -56,7 +45,7 @@ export function setUpdateManifestUrl(url: string): void {
 }
 
 /**
- * Compara dos versiones semánticas (ej. "1.0.0" vs "1.1.0").
+ * Compara dos versiones semánticas (ej. "1.0.0" vs "1.0.2").
  * Retorna true si remoteVersion > localVersion.
  */
 export function isNewerVersion(localVersion: string, remoteVersion: string): boolean {
@@ -74,8 +63,9 @@ export function isNewerVersion(localVersion: string, remoteVersion: string): boo
 }
 
 /**
- * Consulta silenciosamente si existe una nueva versión disponible.
- * Si el teléfono está sin internet (offline), retorna inmediatamente sin bloquear nada.
+ * Consulta con estrategia dual:
+ * 1. Intenta consultar directamente la API oficial de GitHub Releases (sin retraso de caché).
+ * 2. Si falla o hay límite de peticiones, consulta el archivo version.json en raw.githubusercontent.com.
  */
 export async function checkForAppUpdate(): Promise<UpdateCheckResult> {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
@@ -87,9 +77,55 @@ export async function checkForAppUpdate(): Promise<UpdateCheckResult> {
     };
   }
 
+  // Estrategia 1: GitHub API Releases Oficial
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    const apiRes = await fetch(GITHUB_API_LATEST_RELEASE, {
+      signal: controller.signal,
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+    clearTimeout(timeoutId);
+
+    if (apiRes.ok) {
+      const releaseData = await apiRes.json();
+      if (releaseData && typeof releaseData.tag_name === 'string') {
+        const remoteTag = releaseData.tag_name.replace(/^v/i, '').trim();
+        const apkAsset = Array.isArray(releaseData.assets)
+          ? releaseData.assets.find((a: { name: string }) => a.name.endsWith('.apk'))
+          : null;
+
+        const downloadUrl =
+          apkAsset?.browser_download_url ||
+          `https://github.com/${GITHUB_REPO}/releases/download/${releaseData.tag_name}/strawchell.apk`;
+
+        const hasUpdate = isNewerVersion(APP_VERSION, remoteTag);
+
+        return {
+          hasUpdate,
+          currentVersion: APP_VERSION,
+          latestVersion: remoteTag,
+          manifest: {
+            version: remoteTag,
+            publishedAt: releaseData.published_at?.slice(0, 10),
+            notes: releaseData.body || releaseData.name || 'Nueva versión disponible en GitHub.',
+            apkUrl: downloadUrl,
+            webUrl: releaseData.html_url,
+          },
+        };
+      }
+    }
+  } catch {
+    // Si la API falla, continuar con Estrategia 2 (version.json)
+  }
+
+  // Estrategia 2: version.json
   const manifestUrl = getUpdateManifestUrl();
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const timeoutId = setTimeout(() => controller.abort(), 4000);
 
   try {
     const cacheBuster = `?t=${Date.now()}`;
@@ -102,32 +138,24 @@ export async function checkForAppUpdate(): Promise<UpdateCheckResult> {
     });
     clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      return {
-        hasUpdate: false,
-        currentVersion: APP_VERSION,
-        latestVersion: APP_VERSION,
-        error: `No se pudo conectar al canal de actualizaciones (HTTP ${response.status}).`,
-      };
+    if (response.ok) {
+      const data = (await response.json()) as RemoteVersionManifest;
+      if (data && typeof data.version === 'string') {
+        const hasUpdate = isNewerVersion(APP_VERSION, data.version);
+        return {
+          hasUpdate,
+          currentVersion: APP_VERSION,
+          latestVersion: data.version,
+          manifest: data,
+        };
+      }
     }
-
-    const data = (await response.json()) as RemoteVersionManifest;
-    if (!data || typeof data.version !== 'string') {
-      return {
-        hasUpdate: false,
-        currentVersion: APP_VERSION,
-        latestVersion: APP_VERSION,
-        error: 'El archivo version.json remoto no tiene un formato válido.',
-      };
-    }
-
-    const hasUpdate = isNewerVersion(APP_VERSION, data.version);
 
     return {
-      hasUpdate,
+      hasUpdate: false,
       currentVersion: APP_VERSION,
-      latestVersion: data.version,
-      manifest: data,
+      latestVersion: APP_VERSION,
+      error: 'No se pudo conectar al canal de actualizaciones de GitHub.',
     };
   } catch {
     clearTimeout(timeoutId);
@@ -141,25 +169,20 @@ export async function checkForAppUpdate(): Promise<UpdateCheckResult> {
 }
 
 /**
- * Ejecuta la actualización conservando intacto todo el localStorage (tasa, caja e historial)
+ * Ejecuta la actualización abriendo el enlace directo del APK para instalarlo encima
+ * conservando el 100% de los datos de la caja (localStorage)
  */
 export async function applyAppUpdate(manifest?: RemoteVersionManifest): Promise<void> {
-  // 1. Si el manifiesto trae un enlace directo de APK para Android, abrirlo para instalar encima
-  if (manifest?.apkUrl && manifest.apkUrl.trim().length > 0) {
-    window.open(manifest.apkUrl.trim(), '_blank', 'noopener,noreferrer');
-    return;
-  }
+  const targetUrl =
+    manifest?.apkUrl ||
+    `https://github.com/${GITHUB_REPO}/releases/latest/download/strawchell.apk`;
 
-  // 2. Si es actualización web / OTA, limpiar caché de archivos estáticos (NUNCA localStorage) y recargar
-  if ('caches' in window) {
-    try {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((key) => caches.delete(key)));
-    } catch {
-      // Ignorar errores de Cache API
-    }
-  }
+  window.open(targetUrl, '_system');
 
-  window.location.reload();
+  // Fallback por si '_system' no es soportado
+  const a = document.createElement('a');
+  a.href = targetUrl;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.click();
 }
-

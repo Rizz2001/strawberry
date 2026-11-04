@@ -101,17 +101,12 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
       return;
     }
 
-    if (isCredit && !clientName.trim()) {
-      setErrorMsg('Escribe el nombre del cliente');
-      return;
-    }
-
     onAddTransaction({
       category,
       inputCurrency: currency,
       rawAmount: cleanAmount,
       note: note.trim() || undefined,
-      clientName: isCredit ? clientName.trim() : undefined,
+      clientName: isCredit && clientName.trim() ? clientName.trim() : undefined,
       invoiceNumber: isCredit && invoiceNumber.trim() ? invoiceNumber.trim() : undefined,
     });
 
@@ -232,7 +227,7 @@ export const QuickEntryForm: React.FC<QuickEntryFormProps> = ({
               <UserCheck className="w-4 h-4 text-[#F97316] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Nombre del Cliente *"
+                placeholder="Nombre del Cliente (Opcional)"
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 focus:border-[#5B4EFF] focus:bg-white rounded-2xl pl-9 pr-3 py-2 text-xs font-semibold text-[#0F172A] placeholder-[#64748B] focus:outline-none"

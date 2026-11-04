@@ -243,3 +243,4 @@ export const CategoryCasillas: React.FC<CategoryCasillasProps> = ({
     </div>
   );
 };
+
